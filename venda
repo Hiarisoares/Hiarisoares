@@ -1,0 +1,29 @@
+import os
+
+def inicializar_arquivos():
+    if not os.path.exists('vendas.txt'):
+        open('vendas.txt', 'w').close()
+
+def registrar_venda(produto_nome, quantidade):
+    with open('vendas.txt', 'a') as file:
+        file.write(f"{produto_nome},{quantidade}\n")
+    print(f'Venda de {quantidade} unidades de "{produto_nome}" registrada.')
+
+def cancelar_venda(produto_nome, quantidade):
+    with open('vendas.txt', 'a') as file:
+        file.write(f"{produto_nome},{-quantidade}\n")
+    print(f'Venda de {quantidade} unidades de "{produto_nome}" cancelada.')
+
+def listar_vendas():
+    if not os.path.exists('vendas.txt'):
+        print("Nenhuma venda registrada.")
+        return
+    with open('vendas.txt', 'r') as file:
+        vendas = file.readlines()
+        if not vendas:
+            print("Nenhuma venda registrada.")
+            return
+        print("Vendas registradas:")
+        for venda in vendas:
+            produto, quantidade = venda.strip().split(',')
+            print(f"Produto: {produto}, Quantidade: {quantidade}")
