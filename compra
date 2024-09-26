@@ -1,0 +1,29 @@
+import os
+
+def inicializar_arquivos():
+    if not os.path.exists('compras.txt'):
+        open('compras.txt', 'w').close()
+
+def registrar_compra(produto_nome, quantidade):
+    with open('compras.txt', 'a') as file:
+        file.write(f"{produto_nome},{quantidade}\n")
+    print(f'Compra de {quantidade} unidades de "{produto_nome}" registrada.')
+
+def cancelar_compra(produto_nome, quantidade):
+    with open('compras.txt', 'a') as file:
+        file.write(f"{produto_nome},{-quantidade}\n")
+    print(f'Compra de {quantidade} unidades de "{produto_nome}" cancelada.')
+
+def listar_compras():
+    if not os.path.exists('compras.txt'):
+        print("Nenhuma compra registrada.")
+        return
+    with open('compras.txt', 'r') as file:
+        compras = file.readlines()
+        if not compras:
+            print("Nenhuma compra registrada.")
+            return
+        print("Compras registradas:")
+        for compra in compras:
+            produto, quantidade = compra.strip().split(',')
+            print(f"Produto: {produto}, Quantidade: {quantidade}")
