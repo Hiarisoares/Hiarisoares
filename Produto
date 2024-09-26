@@ -1,0 +1,48 @@
+import os
+import json
+
+def inicializar_arquivos():
+    for arquivo in ['produtos.txt', 'fabricantes.txt']:
+        if not os.path.exists(arquivo):
+            open(arquivo, 'w').close()
+
+def carregar_produtos():
+    if not os.path.exists('produtos.txt'):
+        return []
+    with open('produtos.txt', 'r') as file:
+        return json.load(file)
+
+def salvar_produtos(produtos):
+    with open('produtos.txt', 'w') as file:
+        json.dump(produtos, file)
+
+def adicionar_produto(nome, preco_compra, preco_venda, fabricante):
+    produtos = carregar_produtos()
+    produtos.append({'nome': nome, 'fabricante': fabricante, 'preco_compra': preco_compra, 'preco_venda': preco_venda})
+    salvar_produtos(produtos)
+    print(f'Produto "{nome}" adicionado com sucesso.')
+
+def remover_produto(nome):
+    produtos = carregar_produtos()
+    produtos = [p for p in produtos if p['nome'] != nome]
+    salvar_produtos(produtos)
+    print(f'Produto "{nome}" removido com sucesso.')
+
+def listar_produtos():
+    produtos = carregar_produtos()
+    if not produtos:
+        print("Nenhum produto encontrado.")
+        return
+    for p in produtos:
+        print(f"Nome: {p['nome']}, Preço de Compra: R${p['preco_compra']:.2f}, Preço de Venda: R${p['preco_venda']:.2f}")
+
+def atualizar_produto(nome, novo_preco_compra, novo_preco_venda):
+    produtos = carregar_produtos()
+    for p in produtos:
+        if p['nome'] == nome:
+            p['preco_compra'] = novo_preco_compra
+            p['preco_venda'] = novo_preco_venda
+            salvar_produtos(produtos)
+            print(f'Produto "{nome}" atualizado com sucesso.')
+            return
+    print(f'Produto "{nome}" não encontrado.')
